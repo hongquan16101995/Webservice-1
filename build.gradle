@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+    // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
+    implementation group: 'org.springframework', name: 'spring-webmvc', version: '5.3.15'
+    implementation group: 'org.springframework', name: 'spring-core', version: '5.3.15'
+    implementation group: 'org.springframework', name: 'spring-context', version: '5.3.15'
+    implementation group: 'org.springframework', name: 'spring-beans', version: '5.3.15'
+    implementation group: 'org.springframework', name: 'spring-web', version: '5.3.15'
+
+    //hibernate
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.5.Final'
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
+    implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.6.5.Final'
+
+    //orm
+    // https://mvnrepository.com/artifact/org.springframework/spring-orm
+    implementation group: 'org.springframework', name: 'spring-orm', version: '5.3.15'
+
+    //connect database
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
+
+    //jpa
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.6.1'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
+}
+
+test {
+    useJUnitPlatform()
+}
