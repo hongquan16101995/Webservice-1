@@ -1,9 +1,6 @@
 package cg.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Product {
@@ -15,6 +12,9 @@ public class Product {
     private double price;
     private int quantity;
     private String description;
+
+    @ManyToOne
+    private Category category;
 
     public Product() {
     }
@@ -57,5 +57,13 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

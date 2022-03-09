@@ -12,13 +12,14 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/-72LUvgHyU4" title="YouTube video player"
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/-72LUvgHyU4" title="YouTube video player"-->
+<!--        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--        allowfullscreen></iframe>-->
 <div class="container">
     <h1>Product List</h1>
 
     <button class="btn btn-primary" onclick="displayFormCreate()">Create new product</button>
+    <button class="btn btn-primary" onclick="getProductByPage(0)">Display By Page</button>
 
     <form id="searchForm">
         <div class="row">
@@ -31,7 +32,10 @@
         </div>
     </form>
 
-    <table id="productList" class="table table-striped"></table>
+    <div>
+        <table id="productList" class="table table-striped"></table>
+        <div id="displayPage"></div>
+    </div>
 
     <form hidden id="form">
         <div class="mb-3 mt-3">
@@ -50,10 +54,13 @@
             <label for="description" class="form-label">Description:</label>
             <input type="text" class="form-control" id="description" placeholder="Enter description">
         </div>
-        <button type="submit" id="form-button" class="btn btn-primary" data-bs-dismiss="modal">Submit
+        <div class="mb-3">
+            <label class="form-label">Category:</label>
+            <div id="div-category"></div>
+        </div>
+        <button type="submit" id="form-button" class="btn btn-primary">Submit
         </button>
     </form>
 </div>
-
 </body>
 </html>

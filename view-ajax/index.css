@@ -15,3 +15,8 @@ h1 {
 #searchForm {
     float: right;
 }
+
+#page {
+    position: fixed;
+    margin-top: 1000px;
+}

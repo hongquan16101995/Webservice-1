@@ -6,11 +6,15 @@ function addNewProduct() {
     let price = $('#price').val();
     let quantity = $('#quantity').val();
     let description = $('#description').val();
+    let category = $('#category').val();
     let newProduct = {
         name: name,
         price: price,
         quantity: quantity,
-        description: description
+        description: description,
+        category: {
+            id: category,
+        }
     };
     // goi ajax
     $.ajax({
@@ -48,6 +52,7 @@ function editProduct(id) {
             document.getElementById("form-button").onclick = function () {
                 editProduct1()
             };
+            getCategory();
         }
     });
 }
@@ -58,11 +63,15 @@ function editProduct1() {
     let price = $('#price').val();
     let quantity = $('#quantity').val();
     let description = $('#description').val();
+    let category = $('#category').val();
     let newProduct = {
         name: name,
         price: price,
         quantity: quantity,
-        description: description
+        description: description,
+        category: {
+            id: category,
+        }
     };
     // goi ajax
     $.ajax({
@@ -96,6 +105,7 @@ function getProduct() {
                 '<th>Price</th>\n' +
                 '<th>Quantity</th>\n' +
                 '<th>Desciption</th>\n' +
+                '<th>Category</th>\n' +
                 '<th colspan="2">Action</th>\n' +
                 '</tr>';
             for (let i = 0; i < data.length; i++) {
@@ -105,6 +115,53 @@ function getProduct() {
             document.getElementById("form").hidden = true;
         }
     });
+}
+
+function getProductByPage(page) {
+    $.ajax({
+        type: "GET",
+        //tên API
+        url: `http://localhost:8080/api/products/page?page=${page}`,
+        //xử lý khi thành công
+        success: function (data) {
+            let array = data.content
+            // hien thi danh sach o day
+            let content = '<tr>\n' +
+                '<th>ProductName</th>\n' +
+                '<th>Price</th>\n' +
+                '<th>Quantity</th>\n' +
+                '<th>Desciption</th>\n' +
+                '<th>Category</th>\n' +
+                '<th colspan="2">Action</th>\n' +
+                '</tr>';
+            for (let i = 0; i < array.length; i++) {
+                content += displayProduct(array[i]);
+            }
+            document.getElementById("productList").innerHTML = content;
+            document.getElementById("displayPage").innerHTML = displayPage(data)
+            document.getElementById("form").hidden = true;
+            if (data.pageable.pageNumber === 0) {
+                document.getElementById("backup").hidden = true
+            }
+            if (data.pageable.pageNumber + 1 === data.totalPages) {
+                document.getElementById("next").hidden = true
+            }
+        }
+    });
+}
+
+function displayPage(data){
+    return `<button class="btn btn-primary" id="backup" onclick="isPrevious(${data.pageable.pageNumber})">Previous</button>
+    <span>${data.pageable.pageNumber+1} | ${data.totalPages}</span>
+    <button class="btn btn-primary" id="next" onclick="isNext(${data.pageable.pageNumber})">Next</button>`
+}
+
+function isPrevious(pageNumber) {
+    getProductByPage(pageNumber-1)
+}
+
+function isNext(pageNumber) {
+    getProductByPage(pageNumber+1)
 }
 
 function deleteProduct(id) {
@@ -145,33 +202,11 @@ function searchProduct() {
     event.preventDefault();
 }
 
-// $(document).ready(function () {
-//     //sư kiện nào thực hiện Ajax
-//     $('.deleteProduct').click(function (event) {
-//         //lay du lieu
-//         let a = $(this);
-//         let productId = a.attr("href");
-//         // goi ajax
-//         $.ajax({
-//             type: "DELETE",
-//             //tên API
-//             url: `http://localhost:8080/api/products/${productId}`,
-//             //xử lý khi thành công
-//             success: function () {
-//                 a.parent().parent().remove();
-//             }
-//
-//         });
-//         //chặn sự kiện mặc định của thẻ
-//         event.preventDefault();
-//     });
-// })
-
 function displayProduct(product) {
-    return `<tr><td >${product.name}</td><td>${product.price}</td><td >${product.quantity}</td><td >${product.description}</td>
-                    <td><button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button></td>
-                    <td><button class="btn btn-warning" onclick="editProduct(${product.id})">Edit</button></td>
-<!--                    <td><a class="deleteProduct" href="${product.id}">Delete</a></td></tr>-->`;
+    return `<tr><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td>
+            <td>${product.description}</td><td>${product.category.name}</td>
+            <td><button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button></td>
+            <td><button class="btn btn-warning" onclick="editProduct(${product.id})">Edit</button></td></tr>`;
 }
 
 function displayFormCreate() {
@@ -180,6 +215,28 @@ function displayFormCreate() {
     document.getElementById("form-button").onclick = function () {
         addNewProduct();
     }
+    getCategory();
+}
+
+function getCategory() {
+    $.ajax({
+        type: "GET",
+        //tên API
+        url: `http://localhost:8080/api/products/cate`,
+        //xử lý khi thành công
+        success: function (data) {
+            let content = '<select id="category">\n'
+            for (let i = 0; i < data.length; i++) {
+                content += displayCategory(data[i]);
+            }
+            content += '</select>'
+            document.getElementById('div-category').innerHTML = content;
+        }
+    });
+}
+
+function displayCategory(category) {
+    return `<option id="${category.id}" value="${category.id}">${category.name}</option>`;
 }
 
 getProduct()

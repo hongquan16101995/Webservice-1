@@ -1,8 +1,12 @@
 package cg.controller;
 
+import cg.model.Category;
 import cg.model.Product;
 import cg.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +28,24 @@ public class ProductWebserviceController {
             new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Product>> showAllPage(@PageableDefault(value = 2) Pageable pageable) {
+        Page<Product> products = iProductService.findPage(pageable);
+        if (!products.iterator().hasNext()) {
+            new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/cate")
+    public ResponseEntity<Iterable<Category>> showAllCate() {
+        Iterable<Category> categories = iProductService.fillAddCate();
+        if (!categories.iterator().hasNext()) {
+            new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     //lấy 1 đối tượng theo id
