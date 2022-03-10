@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class ProductWebserviceController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    //lấy list product theo pageable
     @GetMapping("/page")
     public ResponseEntity<Page<Product>> showAllPage(@PageableDefault(value = 2) Pageable pageable) {
         Page<Product> products = iProductService.findPage(pageable);
@@ -39,6 +41,7 @@ public class ProductWebserviceController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    //lấy list category
     @GetMapping("/cate")
     public ResponseEntity<Iterable<Category>> showAllCate() {
         Iterable<Category> categories = iProductService.fillAddCate();
@@ -95,5 +98,26 @@ public class ProductWebserviceController {
             new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file")MultipartFile file,
+                                         @RequestParam("name")String name) {
+        System.out.println(file.getOriginalFilename());
+        System.out.println(name);
+        return new ResponseEntity<>("Done",HttpStatus.OK);
+    }
+
+    @PostMapping("/upload1")
+    public ResponseEntity<String> upload1(@RequestPart("file")MultipartFile file,
+                                          @RequestPart("product") Product product) {
+        System.out.println(file.getOriginalFilename());
+        System.out.println(product.getName());
+        product.setDescription(file.getOriginalFilename());
+        Category category = new Category();
+        category.setId(1L);
+        product.setCategory(category);
+        iProductService.save(product);
+        return new ResponseEntity<>("Done",HttpStatus.OK);
     }
 }
